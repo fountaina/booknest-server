@@ -43,13 +43,15 @@ userSchema.pre("save", async function(next) {
 
 // Method on userSchema to compare inputed password and hashed password on database.
 userSchema.methods.matchPassword = async function(enteredPassword) {
-    
+    // Check if password entered my client matches that saved on DB
+    // If password doesn't match return false, otherwise true.
     try {
         const match = await bcrypt.compare(String(enteredPassword), this.password)
         console.log("Matched?...." + match)
         return match
     } catch (error) {
         console.log("Error Matching passwords")
+        return false
     }
 }
 
