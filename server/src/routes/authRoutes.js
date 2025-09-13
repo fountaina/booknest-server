@@ -1,6 +1,6 @@
 import express from "express";
 import User from "../models/userSchema.js";
-// import {authorizeRoles} from "../middleware/auth.js";
+import {authorizeRoles, verifyToken} from "../middleware/auth.js";
 import { registerUser, loginUser } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -11,10 +11,9 @@ router.post("/register", registerUser);
 // Route for Loging In user if they already exist on database.
 router.post("/login", loginUser);
 
-router.get("/login", async (req, res) => {
+router.get("/login", verifyToken, async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users)
+        res.json(req.user);
     } catch (error) {
         res.status(500).json({ message: error.message })
     }

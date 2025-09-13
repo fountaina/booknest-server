@@ -7,6 +7,34 @@ import bcrypt from "bcryptjs";
 //config env
 env.config();
 
+// Generate access token and refresh token
+const generateTokens = (user) => {
+    const accessToken = jwt.sign(
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        },
+        process.env.JWT_ACCESS_TOKEN_SECRET,
+        {expiresIn: "15m"} 
+    );
+
+    const refreshToken = jwt.sign(
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        },
+        process.env.JWT_REFRESH_TOKEN_SECRET,
+        {expiresIn: "7d"}
+    );
+
+    return {accessToken, refreshToken};
+}
+
+// In production store in DB
+let refreshTokens = [];
+
 // Register a user
 export const registerUser = async (req, res) => {
     try {
@@ -22,7 +50,14 @@ export const registerUser = async (req, res) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: "User registered successfully!" })
+
+        const tokens = generateTokens(newUser);
+        res.status(201).json(
+            { 
+                message: "User registered successfully!",
+                accessToken: tokens.accessToken
+            })
+
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -32,7 +67,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email }).select("+password");
-        console.log("User: " + user)
+        // console.log("User: " + user)
         if (!user) {
             return res.status(401).json({ message: "Invalid credentials" })
         }
@@ -44,12 +79,20 @@ export const loginUser = async (req, res) => {
         if (!userValidated) {
             return res.status(401).json({ message: "Invalid credentials" })
         }
-        console.log("User validated: " + userValidated);
 
-        return res.status(200).json({ message: "User logged In successfully!" })
+        // Serializes the user with JWT
+        const tokens = generateTokens(user);
+
+        return res.status(200).json(
+            { 
+                message: "User logged In successfully!",
+                accessToken: tokens.accessToken
+            }
+        )
         // const accessToken = jwt.sign(user, process.env.JWT_ACCESS_TOKEN_SECRET)
         // return res.json({accessToken: accessToken});
     } catch (error) {
 
     }
 };
+
