@@ -13,7 +13,40 @@ export const authorizeRoles = (...roles) => {
     };
 };
 
-export const verifyToken = (req, res, next) => {
+// Generate access token and refresh token
+export const generateTokens = (user) => {
+    const accessToken = jwt.sign(
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        },
+        process.env.JWT_ACCESS_TOKEN_SECRET,
+        {expiresIn: "15m"} 
+    );
+
+    const refreshToken = jwt.sign(
+        {
+            id: user._id,
+            email: user.email,
+            role: user.role
+        },
+        process.env.JWT_REFRESH_TOKEN_SECRET,
+        {expiresIn: "7d"}
+    );
+    // refreshTokens.push(tokens.refreshToken)
+    return {accessToken, refreshToken};
+}
+
+export const activateRefreshToken = (req, res) => {
+    jwt.verify(req.heanders["authorization"], process.env.JWT_REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) {res.status(400).json({message: "Invalid Refresh token"})}
+
+        generateTokens(user);
+    })
+}
+
+export const authenticateUser = (req, res, next) => {
     try {
         const authHeader = req.headers["authorization"] // Get the header from the reqest
         const token = authHeader && authHeader.split(" ")[1] // Gets the token from the gotten header

@@ -5,7 +5,7 @@ Content-Type: application/json
 {
     "email": "fountainaigbona@gmail.com",
     "username": "fountain",
-    "role": "admin",
+    "role": "user",
     "password": 123456
 }
 
@@ -20,6 +20,16 @@ Content-Type: application/json
     "password": 123456
 }
 
+###
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "test3@gmail.com",
+    "username": "test3",
+    "role": "admin",
+    "password": 123456
+}
 
 ###
 POST http://localhost:3000/api/auth/login
@@ -31,5 +41,34 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/api/auth/login
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmY0MzBhNDNiNmQyZTgzNTdjODRlYyIsImVtYWlsIjoiZm91bnRhaW5haWdib25hQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU3NzUxNzkyLCJleHAiOjE3NTc3NTI2OTJ9.nmfKS0WnUpfE3zAmc0yyzyQGxpOJ77H8k2ADuQLjGr8
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email": "test3@gmail.com",
+    "password": "123456"
+}
+
+###
+GET http://localhost:3000/api/auth/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDc2MmNhMDE4ZGMyYTQ4OTI4NjU1MCIsImVtYWlsIjoidGVzdDNAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU4OTQ1OTk0LCJleHAiOjE3NTg5NDY4OTR9.T0RESQbDIM7q1lOCpSTcgSa6XstxSCyD2AUXf2q7To4
+
+Books Routes
+
+###
+POST http://localhost:3000/api/books
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDc2MmNhMDE4ZGMyYTQ4OTI4NjU1MCIsImVtYWlsIjoidGVzdDNAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU4OTQ1OTk0LCJleHAiOjE3NTg5NDY4OTR9.T0RESQbDIM7q1lOCpSTcgSa6XstxSCyD2AUXf2q7To4
+
+{
+    "title": "The Forestry",
+    "author": "Fountain Ehidiamhen",
+    "price": 20
+}
+
+###
+DELETE http://localhost:3000/api/books/68d765dc36a21d950b604ce
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDc2MmNhMDE4ZGMyYTQ4OTI4NjU1MCIsImVtYWlsIjoidGVzdDNAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU4OTQ1OTk0LCJleHAiOjE3NTg5NDY4OTR9.T0RESQbDIM7q1lOCpSTcgSa6XstxSCyD2AUXf2q7To4
+
+###
+GET http://localhost:3000/api/68d765dc36a21d950b604ce

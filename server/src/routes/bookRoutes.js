@@ -1,5 +1,5 @@
 import express from "express";
-import {authorizeRoles} from "../middleware/auth.js";
+import {authorizeRoles, authenticateUser} from "../middleware/auth.js";
 import {
     getAllBooks,
     getBookById,
@@ -23,7 +23,7 @@ router.get("/:id", getBookById);
 // @route   POST /api/books
 // @desc    Add a new book
 // @access  only an admin is authorized to access
-router.post("/", authorizeRoles("admin"), createBook);
+router.post("/", authenticateUser, authorizeRoles("admin"), createBook);
 
 // @route   PUT /api/books/:id
 // @desc    Update a book

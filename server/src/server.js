@@ -3,12 +3,14 @@ import env from "dotenv";
 import bookRoutes from "./routes/bookRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import db from "./config/db.js";
+import cookieParser from "cookie-parser";
 
 //configure express app
 const app = express();
 
-//Middleware to parse json
+//Middleware to parse json, cookies
 app.use(express.json());
+app.use(cookieParser())
 
 //configure env
 env.config();
