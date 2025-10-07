@@ -19,11 +19,8 @@ router.get("/profile", authenticateUser, async (req, res) => {
     }
 })
 
-// router.get("/token", activateRefreshToken, aysnc (req, res) => {
-//     try {
-//         res
-//     }
-// })
+// Route for refreshing token
+router.get("/refreshtoken", refreshToken);
 
 
 export default router;

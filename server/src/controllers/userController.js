@@ -89,11 +89,12 @@ export const loginUser = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email })
+        const user = await User.findOne({ refreshToken: req.cookies.refreshToken }).select("+refreshToken")
         const refreshToken = req.cookies.refreshToken;
+        console.log("User: " + user);
         
-        if (!user || !user.refreshToken) {
-            return res.status(401).json({messag: "Refresh Token not found"})
+        if (!user) {
+            return res.status(401).json({message: "Refresh Token not found"})
         }
 
         // checks if refresh token matches the one in the database
@@ -118,7 +119,7 @@ export const refreshToken = async (req, res) => {
             maxAge: 15 * 60 * 1000,  // 15 minutes
             sameSite: "strict"
         });
-
+        console.log("Token refreshed succesfully!")
         return res.status(200).json({message: "Token refreshed succesfully"})
     } catch (error) {
         console.error("Refresh token failed: " + error);

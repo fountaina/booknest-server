@@ -48,15 +48,13 @@ export const activateRefreshToken = (req, res) => {
 
 export const authenticateUser = (req, res, next) => {
     try {
-        const authHeader = req.headers["authorization"] // Get the header from the reqest
-        const token = authHeader && authHeader.split(" ")[1] // Gets the token from the gotten header
+        // const authHeader = req.headers["authorization"] // Get the header from the reqest
+        // const token = authHeader && authHeader.split(" ")[1] // Gets the token from the gotten header
+        // if (token == null) {return res.sendStatus(401).json({message: "Access token required!"})}
+
+        const token = req.cookies.accessToken; // get access token from cookies
         if (token == null) {return res.sendStatus(401).json({message: "Access token required!"})}
 
-        // jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (err, user) => {
-        //     if (err) {return res.sendStatus(401)}
-        //     req.user = user
-        //     next()
-        // })
         const decodedData = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET)
         
         // Add decode user data to request object

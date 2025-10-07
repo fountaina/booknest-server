@@ -12,6 +12,9 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser())
 
+// Optional: parse URL-encoded if I need it later
+app.use(express.urlencoded({ extended: true }));
+
 //configure env
 env.config();
 const PORT = process.env.PORT;
